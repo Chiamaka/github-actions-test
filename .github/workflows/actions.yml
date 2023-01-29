@@ -16,7 +16,7 @@ jobs:
           echo "${{ github.token }}"
       - name: Checkout repo
         uses: actions/checkout@v1
-      - name: List Files after checkout
+      - name: List Files after Checkout
         run: |
           pwd 
           ls -la
