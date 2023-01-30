@@ -1,9 +1,11 @@
 name: Action Workflow
 
 on:
-  schedule:
-    - cron: "*/5 * * * *"
-    - cron: "*/6 * * * *"
+  # schedule:
+  #   - cron: "*/5 * * * *"
+  #   - cron: "*/6 * * * *"
+  repository_dispatch:
+    types: [build]
   pull_request:
     types:
       - closed
