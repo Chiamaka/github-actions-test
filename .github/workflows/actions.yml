@@ -1,17 +1,27 @@
 name: Action Workflow
 
 on:
+  push:
+    branches: 
+      - master
+      - 'feature/*' # matches anything starteing with feature/{{something}}.
+      - '!feature/featC' # this will ignore this branch.
+    tags: # or tags-ignore; can't be used together.
+      - v1.*
+    paths: # or paths-ignore; can't be used together.
+      - '**.js' # this will match any js file in our repo.
+
   # schedule:
   #   - cron: "*/5 * * * *"
   #   - cron: "*/6 * * * *"
-  repository_dispatch:
-    types: [build]
-  pull_request:
-    types:
-      - closed
-      - assigned
-      - opened
-      - reopened
+  # repository_dispatch:
+  #   types: [build]
+  # pull_request:
+  #   types:
+  #     - closed
+  #     - assigned
+  #     - opened
+  #     - reopened
 
 jobs:
   run-github-actions:
