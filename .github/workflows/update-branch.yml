@@ -31,12 +31,10 @@ jobs:
           ls -a
 
       - name: Check for comment "update branch"
-        if: github.event_name == 'pull_request'
         id: check-comment
         uses: actions/github-script@v6
         with:
           script: |
-            console.log('>>>', context.repo, context.issue)
             const comments = await github.rest.issues.listComments({
               owner: context.repo.owner,
               repo: context.repo.repo,
@@ -53,8 +51,6 @@ jobs:
 
       - name: Merge master into PR branch
         if: steps.check-comment.outputs.result == 'true'
-        env:
-          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         run: |
           ls -a
           git config pull.rebase false
