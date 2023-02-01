@@ -19,14 +19,14 @@ jobs:
     runs-on: ubuntu-latest
 #    if: ${{ github.event.issue.pull_request }}
     steps:
-
       - name: Checkout source code
         uses: actions/checkout@v3
+      - run: |
+          gh pr checkout ${{github.event.issue.number}}
 
       - name: Log stuff
         run: |
-          echo ${{github.event}}
-          echo ${{github.event_name}}
+          ls -a
 
       - name: Check for comment "update branch"
         if: github.event_name == 'pull_request'
