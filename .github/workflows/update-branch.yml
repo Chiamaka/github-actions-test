@@ -56,6 +56,6 @@ jobs:
           git config pull.rebase false
           git checkout master
           git pull origin master
-          git checkout ${{github.event.issue.number}}
+          git checkout ${{github.head_ref}}
           git merge -m "Merge branch 'master' into $GITHUB_REF"
           git push
