@@ -63,7 +63,7 @@ jobs:
           git pull
 
           ls -a
-          git checkout ${{github.head_ref}}
+          gh pr checkout ${{github.event.issue.number}}
           git commit -am "Merge branch 'master' into $GITHUB_REF"
           git merge
           git push
