@@ -52,10 +52,15 @@ jobs:
       - name: Merge master into PR branch
         if: ${{ github.event.comment.body == 'update branch' }}
         run: |
-          ls -a
-          git config pull.rebase false
+          git config --global user.email "my-bot@bot.com"
+          git config --global user.name "my-bot"
+          git fetch 
           git checkout master
-          git pull origin master
+          git branch --set-upstream-to=origin/master
+          git pull
+
+          ls -a
           git checkout ${{github.head_ref}}
-          git merge -m "Merge branch 'master' into $GITHUB_REF"
+          git commit -am "Merge branch 'master' into $GITHUB_REF"
+          git merge
           git push
