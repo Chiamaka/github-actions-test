@@ -23,8 +23,8 @@ jobs:
     steps:
       - name: Checkout source code
         uses: actions/checkout@v3
-      - run: |
-          gh pr checkout ${{github.event.issue.number}}
+      # - run: |
+          # gh pr checkout ${{github.event.issue.number}}
 
       - name: Log stuff
         run: |
