@@ -30,30 +30,32 @@ jobs:
         run: |
           ls -a
 
-      - name: Check for comment "update branch"
-        id: check-comment
-        uses: actions/github-script@v6
-        with:
-          script: |
-            const comments = await github.rest.issues.listComments({
-              owner: context.repo.owner,
-              repo: context.repo.repo,
-              issue_number: context.issue.number,
-            });
+      # - name: Check for comment "update branch"
+      #   id: check-comment
+      #   uses: actions/github-script@v6
+      #   with:
+      #     script: |
+      #       const comments = await github.rest.issues.listComments({
+      #         owner: context.repo.owner,
+      #         repo: context.repo.repo,
+      #         issue_number: context.issue.number,
+      #       });
             
-            console.log('comments', comments)
-            for (const comment of comments.data) {
-                if (comment.body.toLowerCase().includes("update master")) {
-                  return true;
-                }
-              }
-            return false;
+      #       console.log('comments', comments)
+      #       for (const comment of comments.data) {
+      #           if (comment.body.toLowerCase().includes("update master")) {
+      #             return true;
+      #           }
+      #         }
+      #       return false;
 
       - name: Merge master into PR branch
-        if: steps.check-comment.outputs.result == 'true'
+        if: ${{ github.event.comment.body == 'update branch' }}
         run: |
           ls -a
           git config pull.rebase false
+          git checkout master
           git pull origin master
-          git merge --allow-unrelated-histories
+          git checkout ${{github.event.issue.number}}
+          git merge -m "merge master"
           git push
