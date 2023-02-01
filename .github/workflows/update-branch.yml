@@ -57,5 +57,5 @@ jobs:
           git checkout master
           git pull origin master
           git checkout ${{github.event.issue.number}}
-          git merge -m "merge master"
+          git merge -m "Merge branch 'master' into $GITHUB_REF"
           git push
