@@ -29,6 +29,7 @@ jobs:
       - name: Log stuff
         run: |
           ls -a
+          echo ${{github}}
 
       # - name: Check for comment "update branch"
       #   id: check-comment
