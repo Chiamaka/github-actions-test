@@ -17,7 +17,7 @@ jobs:
   update-branch:
     name: Merge master into PR
     runs-on: ubuntu-latest
-#    if: ${{ github.event.issue.pull_request }}
+    if: ${{ github.event.issue.pull_request }}
     steps:
       - name: Checkout source code
         uses: actions/checkout@v3
