@@ -29,7 +29,9 @@ jobs:
       - name: Log stuff
         run: |
           ls -a
-          echo ${{github}}
+          echo ${{github.head_ref}}
+          echo ${{github.base_ref}}
+          echo ${{github.ref}}
 
       # - name: Check for comment "update branch"
       #   id: check-comment
