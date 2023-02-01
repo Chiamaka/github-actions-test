@@ -1,0 +1,61 @@
+name: Update branch
+
+permissions:
+  checks: write
+  id-token: write
+  pull-requests: write
+  contents: write
+  issues: write
+
+on:
+  # pull_request:
+  #   types: [opened, synchronize]
+  issue_comment:
+    types: [created]
+
+jobs:
+  update-branch:
+    name: Merge master into PR
+    runs-on: ubuntu-latest
+    if: ${{ github.event.issue.pull_request }}
+    steps:
+      - name: Checkout source code
+        uses: actions/checkout@v3
+      - run: |
+          gh pr checkout ${{github.event.issue.number}}
+
+      - name: Log stuff
+        run: |
+          ls -a
+
+      - name: Check for comment "update branch"
+        if: github.event_name == 'pull_request'
+        id: check-comment
+        uses: actions/github-script@v6
+        with:
+          script: |
+            console.log('>>>', context.repo, context.issue)
+            const comments = await github.rest.issues.listComments({
+              owner: context.repo.owner,
+              repo: context.repo.repo,
+              issue_number: context.issue.number,
+            });
+            
+            console.log('comments', comments)
+            for (const comment of comments.data) {
+                if (comment.body.toLowerCase().includes("update master")) {
+                  return true;
+                }
+              }
+            return false;
+
+      - name: Merge master into PR branch
+        if: steps.check-comment.outputs.result == 'true'
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        run: |
+          ls -a
+          git config pull.rebase false
+          git pull origin master
+          git merge --allow-unrelated-histories
+          git push
