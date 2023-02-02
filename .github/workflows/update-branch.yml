@@ -64,7 +64,7 @@ jobs:
           echo head ref: ${GITHUB_HEAD_REF}
           echo base ref: ${GITHUB_BASE_REF}
           echo ref name: ${GITHUB_REF_NAME}
-          echo repo: ${{github.event.repository}}
+          echo repo: ${{fromJSON(github.event.repository)}}
 
 
           git config --global user.email "${GITHUB_ACTOR}"
