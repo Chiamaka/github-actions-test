@@ -1,4 +1,4 @@
-name: Update branch
+name: Merge master into PR
 
 permissions:
   checks: write
@@ -9,6 +9,8 @@ permissions:
 
 env: 
   GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+  DEFAULT_BRANCH: ${{ github.event.repository.default_branch }}
+
 on:
   # pull_request:
   #   types: [opened, synchronize]
@@ -17,21 +19,22 @@ on:
 
 jobs:
   update-branch:
-    name: Merge master into PR
+    name: Merge master
     runs-on: ubuntu-latest
     if: ${{ github.event.issue.pull_request }}
+
     steps:
       - name: Checkout source code
         uses: actions/checkout@v3
-      - run: |
-          gh pr checkout ${{github.event.issue.number}}
+        with:
+          ref: ${{ github.event.pull_request.head.ref }}
 
-      - name: Log stuff
-        run: |
-          ls -a
-          echo $GITHUB_REF
-          echo ${{github.base_ref}}
-          echo ${{github.ref}}
+      # - name: Log stuff
+      #   run: |
+      #     ls -a
+      #     echo $GITHUB_REF
+      #     echo ${{github.base_ref}}
+      #     echo ${{github.ref}}
 
       # - name: Check for comment "update branch"
       #   id: check-comment
@@ -55,15 +58,13 @@ jobs:
       - name: Merge master into PR branch
         if: ${{ github.event.comment.body == 'update branch' }}
         run: |
-          git config --global user.email "my-bot@bot.com"
-          git config --global user.name "my-bot"
-          git fetch 
-          git checkout master
-          git branch --set-upstream-to=origin/master
+          git config --global user.email "${GITHUB_ACTOR}"
+          git config --global user.name "${GITHUB_ACTOR}@users.noreply.github.com""
+          git status
           git pull
-
-          ls -a
-          gh pr checkout ${{github.event.issue.number}}
-          git commit -am "Merge branch 'master' into $GITHUB_REF"
-          git merge
+          git checkout "$DEFAULT_BRANCH"
+          git status
+          git checkout "$GITHUB_HEAD_REF"
+          git merge "$DEFAULT_BRANCH" --no-edit  -m "Merge branch 'master' into $GITHUB_REF"
           git push
+          git status
