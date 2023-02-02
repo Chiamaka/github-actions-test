@@ -61,9 +61,9 @@ jobs:
         run: |
           echo default branch: $DEFAULT_BRANCH
           echo github actor: ${GITHUB_ACTOR}
-          echo head ref: $GITHUB_HEAD_REF
-          echo base ref: $GITHUB_BASE_REF
-          echo ref name: GITHUB_REF_NAME
+          echo head ref: ${GITHUB_HEAD_REF}
+          echo base ref: ${GITHUB_BASE_REF}
+          echo ref name: ${GITHUB_REF_NAME}
 
 
           git config --global user.email "${GITHUB_ACTOR}"
